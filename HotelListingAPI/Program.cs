@@ -1,6 +1,7 @@
 using HotelListingAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using HotelListingAPI.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,10 +39,13 @@ app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
+// study this configuration
+
 app.UseCors("Allowall");
 
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 app.Run();

@@ -1,11 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using HotelListingAPI.Data;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelListingAPI.Model
 {
     public class Hotel
     {
         public int ID { get; set; }
-        public string Name { get; set; }    
+        public string Name { get; set; }
         public string Address { get; set; }
         public double Rating { get; set; }
 
@@ -15,4 +19,6 @@ namespace HotelListingAPI.Model
         public Country Country { get; set; }
 
     }
+
+
 }
