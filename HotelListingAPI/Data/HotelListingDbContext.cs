@@ -44,7 +44,7 @@ namespace HotelListingAPI.Data
             modelBuilder.Entity<Hotel>().HasData(
                 new Hotel
                 {
-                    ID = 1,
+                    Id = 1,
                     Name = "Temitope Oluwafemi",
                     Address = "No 23, Hossanah thift class, off lagos stree ikeja ",
                     CountryID = 2,
@@ -52,7 +52,7 @@ namespace HotelListingAPI.Data
                 },
                 new Hotel
                 {
-                    ID = 2,
+                    Id = 2,
                     Name = "Solomon Chika",
                     Address = "No 22, elesegun street",
                     CountryID = 3,
