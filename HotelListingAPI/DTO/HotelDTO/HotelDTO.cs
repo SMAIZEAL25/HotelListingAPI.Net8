@@ -2,7 +2,7 @@
 
 namespace HotelListingAPI.DTO.HotelDTO
 {
-    public class HotelDTO
+    public class HotelDTO :BaseHotelDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -10,4 +10,5 @@ namespace HotelListingAPI.DTO.HotelDTO
         public double Rating { get; set; }
         public int CountryID { get; set; }
     }
+    
 }

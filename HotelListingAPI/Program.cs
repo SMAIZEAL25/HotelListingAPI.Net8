@@ -4,6 +4,10 @@ using Serilog;
 using AutoMapper;
 using HotelListingAPI.Contract;
 using HotelListingAPI.Respository;
+using HotelListingAPI.DTO.HotelDTO;
+using Microsoft.AspNetCore.Identity;
+using HotelListingAPI.Model;
+using HotelListingAPI.AuthManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +44,16 @@ builder.Services.AddAutoMapper(typeof(Mapper));
 // Repository 
 builder.Services.AddScoped(typeof(IGenericRespository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICountriesRespository, CountriesRepository>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
 
+// This is service is to add Identity users roles for our JWT Token Using entity Frame work store 
+builder.Services.AddIdentityCore<APIUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<HotelListingDbContext>();
+
+
+  
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
