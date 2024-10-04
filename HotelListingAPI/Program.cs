@@ -8,6 +8,9 @@ using HotelListingAPI.DTO.HotelDTO;
 using Microsoft.AspNetCore.Identity;
 using HotelListingAPI.Model;
 using HotelListingAPI.AuthManager;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,11 @@ builder.Services.AddDbContext<HotelListingDbContext>(options =>{
     options.UseSqlServer(connectionstring);
 });
 
+builder.Services.AddIdentityCore<APIUser>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<APIUser>>("HostelListingApi")
+    .AddEntityFrameworkStores<HotelListingDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -47,6 +55,32 @@ builder.Services.AddScoped<ICountriesRespository, CountriesRepository>();
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 
+
+
+
+// JWT TOKEN FOR LOGIN AUTHENTICATION
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; //Bearer
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(Options => {
+    Options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,  // Validation for the bearer and the issuser
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
+        
+    };
+
+});
+
+
+
 // This is service is to add Identity users roles for our JWT Token Using entity Frame work store 
 builder.Services.AddIdentityCore<APIUser>()
     .AddRoles<IdentityRole>()
@@ -69,6 +103,7 @@ app.UseHttpsRedirection();
 app.UseCors("Allowall");
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 

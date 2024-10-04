@@ -10,11 +10,13 @@ using HotelListingAPI.Model;
 using AutoMapper;
 using HotelListingAPI.DTO.CountryDTO;
 using HotelListingAPI.Contract;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelListingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class CountriesController : ControllerBase
     {
         // private fields that makes refference to the class that i'm using here 
@@ -67,6 +69,7 @@ namespace HotelListingAPI.Controllers
         // PUT: api/Countries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutCountry(int id, UpdateCountryDTO updateCountryDTO)
         {
             if (id != updateCountryDTO.Id)
@@ -108,6 +111,7 @@ namespace HotelListingAPI.Controllers
         // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")] // only admininstrator can carryout this delete operation NOTE: user can be assign admin role is the database 
         public async Task<ActionResult<Country>> PostCountry(CreateCountryDTO createCountryDTO)
         {
             // manual mapping of automapper 
@@ -130,6 +134,7 @@ namespace HotelListingAPI.Controllers
 
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteCountry(int id)
         {
             var country = await _countriesRespository.GetAsync(id);

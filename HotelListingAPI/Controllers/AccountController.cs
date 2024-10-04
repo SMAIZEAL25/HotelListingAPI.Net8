@@ -17,17 +17,16 @@ namespace HotelListingAPI.Controllers
             this._authManager = authManager;
         }
 
-
-      // Post: // api/Account.register
+        // Post: // api/Account.register
         [HttpPost]
         [Route("register")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
-        public async Task<ActionResult> Register([FromBody]APIUsersDTO aPIUsersDTO)
+        public async Task<ActionResult> Register([FromBody] APIUsersDTO aPIUsersDTO)
         {
-            var error =  await _authManager.Register(aPIUsersDTO); // different a model and modelstate
+            var error = await _authManager.Register(aPIUsersDTO); // different a model and modelstate
 
             if (error.Any())
             {
@@ -40,9 +39,54 @@ namespace HotelListingAPI.Controllers
 
             }
 
-            return Ok(aPIUsersDTO);
+            return Ok();
 
         }
-            
+
+
+        // Post: // api/Account.Login
+        [HttpPost]
+        [Route("Login")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)] 
+
+        public async Task<ActionResult> Login([FromBody]LoginDTO login)
+        {
+         
+            var authResponseDto = await _authManager.Login(login);
+
+            if (authResponseDto  == null)
+            {
+                return Unauthorized();
+            }
+          
+
+            return Ok();
+
+        }
+
+        // Post: // api/RefeshToken
+        [HttpPost]
+        [Route("RefreshToken")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult> RefeshToken([FromBody] AuthResponseDto request)
+        {
+
+            var authResponseDto = await _authManager.VerifyRefreshToken(request);
+
+            if (authResponseDto == null)
+            {
+                return Unauthorized();
+            }
+
+
+            return Ok(authResponseDto);
+
+        }
+
     }
 }   

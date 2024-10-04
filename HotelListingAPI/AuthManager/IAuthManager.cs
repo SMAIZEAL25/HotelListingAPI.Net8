@@ -7,6 +7,12 @@ namespace HotelListingAPI.AuthManager
     {
         // Here the kind of operation this IAuthManager should carryout anytime it's called on 
 
-        public Task <IEnumerable<IdentityError>> Register(APIUsersDTO usersDTO);
+        Task<IEnumerable<IdentityError>> Register(APIUsersDTO usersDTO);
+
+        Task<AuthResponseDto> Login(LoginDTO loginDTO);
+
+        Task<string> CreateRefreshToken();
+
+        Task<AuthResponseDto> VerifyRefreshToken(AuthResponseDto request);
     }
 }
