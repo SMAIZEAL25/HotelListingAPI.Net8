@@ -3,6 +3,7 @@ using HotelListingAPI.Model;
 using HotelListingAPI.Model.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,17 +16,18 @@ namespace HotelListingAPI.AuthManager
         private readonly UserManager<APIUser> _userManager;
         private readonly IConfiguration _configuration1;
         private APIUser _user;
+        private readonly ILogger<AuthManager> _logger;
 
         // global variable 
         private const string _loginProvider = "HotelListingApi";
         private const string _refreshToken = "RefreshToken";
         // implementing IMapper here because this AuthDTO is not been implemented directly to the database
 
-        public AuthManager(IMapper mapper, UserManager<APIUser> userManager, IConfiguration configuration)
+        public AuthManager(IMapper mapper, UserManager<APIUser> userManager, IConfiguration configuration, ILogger<AuthManager> logger)
         {
             this._mapper = mapper;
             this._userManager = userManager;
-
+            this._logger = logger;
         }
 
         // this method createrefreshtoken so that we don't have to delete user while creating new token
@@ -71,19 +73,23 @@ namespace HotelListingAPI.AuthManager
 
         public async Task<AuthResponseDto> Login(LoginDTO loginDTO)
         {
+            _logger.LogInformation($"looking for user with email {loginDTO.Email}");
             _user = await _userManager.FindByEmailAsync(loginDTO.Email);
             bool IsValidUser = await _userManager.CheckPasswordAsync(_user, loginDTO.Password);
 
             if (_user == null || IsValidUser == false)
-            {
+            { 
+                _logger.LogWarning($"üser with eamil {loginDTO.Email} was not found");
                 return null;
             }
 
             var token = await GenerateToken();
+            _logger.LogInformation($"Token Generated for user with email {loginDTO.Email} | token: {token}");
             return new AuthResponseDto
             {
                 token = token,
-                userId = _user.Id
+                userId = _user.Id,
+                RefreshToken = await CreateRefreshToken(),
             };
         }
 

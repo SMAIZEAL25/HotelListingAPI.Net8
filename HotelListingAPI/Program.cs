@@ -11,12 +11,17 @@ using HotelListingAPI.AuthManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using HotelListingAPI.Middleware;
+using Asp.Versioning;
+using System.Security.Cryptography.Xml;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionstring = builder.Configuration.GetConnectionString("HostelListingDbConnectionStrings");
-builder.Services.AddDbContext<HotelListingDbContext>(options =>{
+builder.Services.AddDbContext<HotelListingDbContext>(options =>
+{
     options.UseSqlServer(connectionstring);
 });
 
@@ -63,7 +68,8 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; //Bearer
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(Options => {
+}).AddJwtBearer(Options =>
+{
     Options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,  // Validation for the bearer and the issuser
@@ -74,7 +80,7 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
-        
+
     };
 
 });
@@ -87,13 +93,38 @@ builder.Services.AddIdentityCore<APIUser>()
     .AddEntityFrameworkStores<HotelListingDbContext>();
 
 
-  
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Api Versioning 
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion =Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = ApiVersionReader.Combine(
+        new QueryStringApiVersionReader("api-version"),
+        new HeaderApiVersionReader("X-Version"),
+        new MediaTypeApiVersionReader("Ver")
+        );
+});
+
+builder.Services.AddVersionedApiExplorer(
+    Options =>
+    {
+        Options.GroupNameFormat = "'v'vvv";
+        Options.SubstituteApiVersionInUrl = true;
+    });
+
+
+// the middleware that managers the Global exception handlers inside the exception folder 
+app.UseMiddleware<ExceptionMIddleWare>();
+
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();

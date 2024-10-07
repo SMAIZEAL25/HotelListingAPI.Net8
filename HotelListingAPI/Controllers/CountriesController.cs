@@ -11,6 +11,7 @@ using AutoMapper;
 using HotelListingAPI.DTO.CountryDTO;
 using HotelListingAPI.Contract;
 using Microsoft.AspNetCore.Authorization;
+using  HotelListingAPI.Exceptions;
 
 namespace HotelListingAPI.Controllers
 {
@@ -22,15 +23,17 @@ namespace HotelListingAPI.Controllers
         // private fields that makes refference to the class that i'm using here 
         private readonly IMapper _mapper;
         private readonly ICountriesRespository _countriesRespository;
+        private readonly ILogger _logger;
 
 
 
         // Constructor class
-        public CountriesController(IMapper mapper, ICountriesRespository countriesRespository)
+        public CountriesController(IMapper mapper, ICountriesRespository countriesRespository, ILogger<CountriesController> logger)
         {
             
             this._mapper = mapper;
             this._countriesRespository = countriesRespository;
+            this._logger = logger;
         }
 
 
@@ -51,13 +54,19 @@ namespace HotelListingAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CountryDTO>> GetCountry(int id)
         {
+
             // include the list of hotels and while you are fetching me the first record with the matching entity that has the Id 
             var country = await _countriesRespository.GetDetails(id);
 
 
             if (country == null)
             {
-                return NotFound();
+                //_logger.LogWarning($"Record Not Found in {nameof(GetCountry)} with the id: {id}.");
+                //return NotFound();
+
+                // implementation of the custom logger and try catch blosk here 
+
+                throw new NotfoundException(nameof(GetCountry), id);
             }
 
             var countryDto = _mapper.Map<CountryDTO>(country); 
