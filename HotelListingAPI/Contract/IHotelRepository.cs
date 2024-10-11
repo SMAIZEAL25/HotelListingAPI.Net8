@@ -1,4 +1,4 @@
-﻿using HotelListingAPI.Model;
+﻿using HotelListingAPI.Data.Model;
 
 namespace HotelListingAPI.Contract
 {

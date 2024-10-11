@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
+using HotelListingAPI.Data.Model;
 using HotelListingAPI.DTO.CountryDTO;
 using HotelListingAPI.DTO.HotelDTO;
-using HotelListingAPI.Model;
-using HotelListingAPI.Model.Users;
-
+using HotelListingAPI.Users;
 
 namespace HotelListingAPI.AutoMapperConfig
 {

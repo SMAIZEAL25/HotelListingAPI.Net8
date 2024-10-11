@@ -1,4 +1,4 @@
-﻿using HotelListingAPI.Model;
+﻿using HotelListingAPI.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

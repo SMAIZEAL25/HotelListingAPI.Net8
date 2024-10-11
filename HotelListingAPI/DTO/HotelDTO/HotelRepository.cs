@@ -1,13 +1,14 @@
-﻿using HotelListingAPI.Contract;
+﻿using AutoMapper;
+using HotelListingAPI.Contract;
 using HotelListingAPI.Data;
-using HotelListingAPI.Model;
+using HotelListingAPI.Data.Model;
 using HotelListingAPI.Respository;
 
 namespace HotelListingAPI.DTO.HotelDTO
 {
     public class HotelRepository : GenericRepository<Hotel>, IHotelRepository
     {
-        public HotelRepository(HotelListingDbContext context) : base(context)
+        public HotelRepository(HotelListingDbContext context, IMapper mapper) : base(context, mapper)
         {
         }
     }

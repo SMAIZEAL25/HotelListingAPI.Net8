@@ -1,4 +1,5 @@
-﻿using HotelListingAPI.Model;
+﻿
+using HotelListingAPI.QueriableParameters;
 
 namespace HotelListingAPI.Contract
 {
@@ -8,6 +9,8 @@ namespace HotelListingAPI.Contract
         Task<T> GetAsync(int? id);
 
         Task<List<T>> GetAllAsync();
+
+        Task<PageResult<TResult>> GetAllAsync<TResult>(QueriableParameter queryParameters);
 
         Task <T> AddAsync (T entity);
 

@@ -1,0 +1,6 @@
+@Hotelisting.core.cs_HostAddress = http://localhost:5141
+
+GET {{Hotelisting.core.cs_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

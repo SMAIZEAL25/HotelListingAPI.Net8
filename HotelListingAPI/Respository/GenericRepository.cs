@@ -1,5 +1,8 @@
-﻿using HotelListingAPI.Contract;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using HotelListingAPI.Contract;
 using HotelListingAPI.Data;
+using HotelListingAPI.QueriableParameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListingAPI.Respository
@@ -8,11 +11,13 @@ namespace HotelListingAPI.Respository
     {
 
         private readonly HotelListingDbContext _context;
+        private readonly IMapper _mapper;
 
 
-        public GenericRepository(HotelListingDbContext context)
+        public GenericRepository(HotelListingDbContext context, IMapper mapper)
         {
             this._context = context;
+            this._mapper = mapper;
         }
 
 
@@ -45,6 +50,29 @@ namespace HotelListingAPI.Respository
             // sotot the database _context use the Dbset<T> T is a generic Type that represent any type eg in the dbset.entity in te dbcontext  
             return await _context.Set<T>().ToListAsync();
 
+        }
+
+        // pagining method 
+        public async Task<PageResult<TResult>> GetAllAsync<TResult>(QueriableParameter queryParameters)
+        {
+            var totalSize = await _context.Set<T>().CountAsync();
+            var items = await _context.Set<T>()
+                .Skip(queryParameters.StartIndex)
+                .Take(queryParameters.PageSize)
+
+                // first inject the mapper 
+                .ProjectTo<TResult>(_mapper.ConfigurationProvider) 
+                .ToListAsync();
+            return new PageResult<TResult> 
+            { 
+                Items = items,
+                PageNumber = queryParameters.StartIndex,
+                RecordNumber = queryParameters.PageSize,
+                TotalCount = totalSize
+            
+            };
+
+           
         }
 
         public async Task<T> GetAsync(int? id)

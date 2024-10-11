@@ -1,4 +1,4 @@
-﻿using HotelListingAPI.Model.Users;
+﻿using HotelListingAPI.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace HotelListingAPI.AuthManager

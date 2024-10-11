@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace HotelListingAPI.Model
+namespace HotelListingAPI.Data.Model
 {
     public class APIUser : IdentityUser
     {

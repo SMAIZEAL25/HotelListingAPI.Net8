@@ -1,5 +1,5 @@
 ﻿using HotelListingAPI.Data.Configuration;
-using HotelListingAPI.Model;
+using HotelListingAPI.Data.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

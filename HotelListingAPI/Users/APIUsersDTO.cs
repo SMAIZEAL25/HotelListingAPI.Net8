@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HotelListingAPI.Model.Users
+namespace HotelListingAPI.Users
 {
     public class APIUsersDTO : LoginDTO
     {
@@ -9,7 +9,7 @@ namespace HotelListingAPI.Model.Users
 
         [Required]
         public string LastName { get; set; }
-    
+
 
     }
 }

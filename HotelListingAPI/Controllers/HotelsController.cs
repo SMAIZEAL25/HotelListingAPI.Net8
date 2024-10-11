@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelListingAPI.Data;
-using HotelListingAPI.Model;
 using AutoMapper;
 using HotelListingAPI.Contract;
 using HotelListingAPI.DTO.HotelDTO;
 using Microsoft.AspNetCore.Authorization;
+using HotelListingAPI.Data.Model;
 
 namespace HotelListingAPI.Controllers
 {
@@ -36,7 +36,7 @@ namespace HotelListingAPI.Controllers
             var hotels = await _hotelRepository1.GetAllAsync();
             return Ok (_mapper.Map<List<HotelDTO>>(hotels));
         }
-           
+            
 
 
         // GET: api/Hotels/5

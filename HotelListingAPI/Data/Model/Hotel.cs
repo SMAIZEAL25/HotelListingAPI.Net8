@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.EntityFrameworkCore;
 
-namespace HotelListingAPI.Model
+namespace HotelListingAPI.Data.Model
 {
     public class Hotel
     {

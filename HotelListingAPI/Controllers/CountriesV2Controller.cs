@@ -11,15 +11,16 @@ using HotelListingAPI.DTO.CountryDTO;
 using HotelListingAPI.Contract;
 using Microsoft.AspNetCore.Authorization;
 using HotelListingAPI.Exceptions;
+using Microsoft.AspNetCore.OData.Query;
 using HotelListingAPI.Data.Model;
 
 namespace HotelListingAPI.Controllers
 {
-    [Route("api/v{version:apiVersion/countries}")]
+    [Route("api/v{version:apiVersion}/countries")]
     [ApiController]
-    [ApiVersion("1.0", Deprecated = true)]
+    [ApiVersion("2.0")]
 
-    public class CountriesController : ControllerBase
+    public class CountriesV2Controller : ControllerBase 
     {
         // private fields that makes refference to the class that i'm using here 
         private readonly IMapper _mapper;
@@ -29,7 +30,7 @@ namespace HotelListingAPI.Controllers
 
 
         // Constructor class
-        public CountriesController(IMapper mapper, ICountriesRespository countriesRespository, ILogger<CountriesController> logger)
+        public CountriesV2Controller(IMapper mapper, ICountriesRespository countriesRespository, ILogger<CountriesController> logger)
         {
             
             this._mapper = mapper;
@@ -41,23 +42,16 @@ namespace HotelListingAPI.Controllers
 
 
         // GET: api/Countries
-        [HttpGet("GETALL")]
+        [HttpGet]
+        [EnableQuery] //using Odata
         public async Task<ActionResult<IEnumerable<GetCountryDTO>>> GetCountries()
         {
             var countries = await _countriesRespository.GetAllAsync();
             var records = _mapper.Map<List<GetCountryDTO>>(countries);
             return Ok(records);
-        }
+        } 
 
-        // GET: api/Countries/?StartIndex=0&pagesize=25&PageNUmber
-        [HttpGet]
-        public async Task<ActionResult<PageResult<GetCountryDTO>>> GetPagedCountries([FromQuery] QueriableParameters queriableParameters)
-        {
-            var pagedCountriesResult = await _countriesRespository.GetAllAsync<GetCountryDTO>(queriableParameters);
-            return Ok(pagedCountriesResult);
-        }
 
-         
 
         // GET: api/Countries/5
         [HttpGet("{id}")]

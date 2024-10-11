@@ -6,15 +6,16 @@ using HotelListingAPI.Contract;
 using HotelListingAPI.Respository;
 using HotelListingAPI.DTO.HotelDTO;
 using Microsoft.AspNetCore.Identity;
-using HotelListingAPI.Model;
 using HotelListingAPI.AuthManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HotelListingAPI.Middleware;
-using Asp.Versioning;
 using System.Security.Cryptography.Xml;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.OData;
+using HotelListingAPI.Data.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,7 +85,7 @@ builder.Services.AddAuthentication(options =>
     };
 
 });
-
+ 
 
 
 // This is service is to add Identity users roles for our JWT Token Using entity Frame work store 
@@ -105,7 +106,7 @@ if (app.Environment.IsDevelopment())
 builder.Services.AddApiVersioning(options =>
 {
     options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion =Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
     options.ReportApiVersions = true;
     options.ApiVersionReader = ApiVersionReader.Combine(
         new QueryStringApiVersionReader("api-version"),
@@ -122,6 +123,23 @@ builder.Services.AddVersionedApiExplorer(
     });
 
 
+// responses caching 
+builder.Services.AddResponseCaching(options =>
+{
+    options.MaximumBodySize = 1034;
+    options.UseCaseSensitivePaths = true;
+});
+
+var apps = builder.Build();
+
+// using OData 
+
+builder.Services.AddControllers().AddOData(Options =>
+{
+    Options.Select().Filter().OrderBy();
+});
+
+
 // the middleware that managers the Global exception handlers inside the exception folder 
 app.UseMiddleware<ExceptionMIddleWare>();
 
@@ -132,6 +150,23 @@ app.UseHttpsRedirection();
 // study this configuration
 
 app.UseCors("Allowall");
+
+// responseCaching 
+app.UseResponseCaching();
+app.Use(async (context, next) =>
+{
+    context.Response.GetTypedHeaders().CacheControl = 
+    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+    {
+        Public = true,
+        MaxAge = TimeSpan.FromSeconds(18),
+    };
+    context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] = 
+    new string[] { "Appect-Encoding" };
+
+    await next();
+});
+
 
 app.UseAuthorization();
 app.UseAuthentication();
