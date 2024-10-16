@@ -5,6 +5,8 @@
 //using System.Security.Policy;
 //using static HotelListingAPI.DTO.HotelDTO.HotelDTO;
 
+using HotelListingAPI.DTO.HotelDTO;
+
 namespace HotelListingAPI.DTO.CountryDTO
 {
     public class CountryDTO
@@ -13,6 +15,6 @@ namespace HotelListingAPI.DTO.CountryDTO
         public int Id { get; set; }
         public string Name { get; set; }
         public string Shortname { get; set; }
-        public List<HotelDTO> Hotels { get; set; }
+        public List<BaseHotelDTO> Hotels { get; set; }
     }
 }

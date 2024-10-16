@@ -1,7 +1,6 @@
-﻿
-using HotelListingAPI.QueriableParameters;
+﻿using HotelListingAPI.QueriableParameters;
 
-namespace HotelListingAPI.Contract
+namespace HotelListingAPI.Respository.Contract
 {
     public interface IGenericRespository<T> where T : class
     {
@@ -12,17 +11,17 @@ namespace HotelListingAPI.Contract
 
         Task<PageResult<TResult>> GetAllAsync<TResult>(QueriableParameter queryParameters);
 
-        Task <T> AddAsync (T entity);
+        Task<T> AddAsync(T entity);
 
         Task UpdateAsync(T entity);
 
-        Task DeleteAsync (int Id);
+        Task DeleteAsync(int Id);
 
         Task<bool> Exists(int id);
-        
+
     }
-  
+
 }
 
 
-  
+

@@ -8,14 +8,16 @@ using Microsoft.EntityFrameworkCore;
 using HotelListingAPI.Data;
 using AutoMapper;
 using HotelListingAPI.DTO.CountryDTO;
-using HotelListingAPI.Contract;
 using Microsoft.AspNetCore.Authorization;
 using HotelListingAPI.Exceptions;
 using HotelListingAPI.Data.Model;
+using HotelListingAPI.Respository.Contract;
+using HotelListingAPI.QueriableParameters;
 
 namespace HotelListingAPI.Controllers
 {
-    [Route("api/v{version:apiVersion/countries}")]
+    //[Route("api/v{version:apiVersion/countries}")]
+    [Route("api/[controller]")]
     [ApiController]
     [ApiVersion("1.0", Deprecated = true)]
 
@@ -51,7 +53,7 @@ namespace HotelListingAPI.Controllers
 
         // GET: api/Countries/?StartIndex=0&pagesize=25&PageNUmber
         [HttpGet]
-        public async Task<ActionResult<PageResult<GetCountryDTO>>> GetPagedCountries([FromQuery] QueriableParameters queriableParameters)
+        public async Task<ActionResult<PageResult<GetCountryDTO>>> GetPagedCountries([FromQuery] QueriableParameter queriableParameters)
         {
             var pagedCountriesResult = await _countriesRespository.GetAllAsync<GetCountryDTO>(queriableParameters);
             return Ok(pagedCountriesResult);

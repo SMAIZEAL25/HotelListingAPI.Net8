@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelListingAPI.Data;
 using AutoMapper;
-using HotelListingAPI.Contract;
 using HotelListingAPI.DTO.HotelDTO;
 using Microsoft.AspNetCore.Authorization;
 using HotelListingAPI.Data.Model;
+using HotelListingAPI.Respository.Contract;
 
 namespace HotelListingAPI.Controllers
 {

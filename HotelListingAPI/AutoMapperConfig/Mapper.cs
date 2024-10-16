@@ -6,9 +6,7 @@ using HotelListingAPI.Users;
 
 namespace HotelListingAPI.AutoMapperConfig
 {
-    public class Mapper
-    {
-        public class MappingConfig : Profile
+    public class MappingConfig : Profile
         {
             public MappingConfig()
             {
@@ -24,9 +22,8 @@ namespace HotelListingAPI.AutoMapperConfig
                 CreateMap<Hotel, CreatHotelDTO>().ReverseMap();
 
 
-                CreateMap<APIUsersDTO, APIUser>().ReverseMap();
+                CreateMap<APIUser, APIUsersDTO>().ReverseMap();
             }
         }
-    }
 }
  

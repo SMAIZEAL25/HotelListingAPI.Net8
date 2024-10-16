@@ -13,7 +13,6 @@ namespace HotelListingAPI.Middleware
         {
             this._next = next;
             this._logger = logger;
-            
         }
 
         public async Task InvokeAsync(HttpContext context)

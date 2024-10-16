@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using HotelListingAPI.Contract;
 using HotelListingAPI.Data;
 using HotelListingAPI.Data.Model;
 using HotelListingAPI.Respository;
+using HotelListingAPI.Respository.Contract;
 
 namespace HotelListingAPI.DTO.HotelDTO
 {

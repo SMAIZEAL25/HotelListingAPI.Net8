@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using HotelListingAPI.Contract;
 using HotelListingAPI.Data;
 using HotelListingAPI.Data.Model;
+using HotelListingAPI.Respository.Contract;
 using Microsoft.EntityFrameworkCore;
 using System;
 

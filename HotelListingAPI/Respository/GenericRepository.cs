@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using HotelListingAPI.Contract;
 using HotelListingAPI.Data;
 using HotelListingAPI.QueriableParameters;
+using HotelListingAPI.Respository.Contract;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListingAPI.Respository

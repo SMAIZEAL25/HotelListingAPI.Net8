@@ -2,7 +2,6 @@ using HotelListingAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using AutoMapper;
-using HotelListingAPI.Contract;
 using HotelListingAPI.Respository;
 using HotelListingAPI.DTO.HotelDTO;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.OData;
 using HotelListingAPI.Data.Model;
+using HotelListingAPI.Respository.Contract;
+using HotelListingAPI.AutoMapperConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,11 +27,14 @@ builder.Services.AddDbContext<HotelListingDbContext>(options =>
     options.UseSqlServer(connectionstring);
 });
 
+builder.Services.AddDataProtection();
 builder.Services.AddIdentityCore<APIUser>()
     .AddRoles<IdentityRole>()
     .AddTokenProvider<DataProtectorTokenProvider<APIUser>>("HostelListingApi")
     .AddEntityFrameworkStores<HotelListingDbContext>()
     .AddDefaultTokenProviders();
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -46,14 +50,9 @@ builder.Services.AddCors(options =>
     .AllowAnyMethod());
 });
 
-// Configuration for Serilog 
-// ctx stands for context variable lc stands for logger configuration   
-
-builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
-var app = builder.Build();
 
 // AtuMapper Config 
-builder.Services.AddAutoMapper(typeof(Mapper));
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 // Repository 
 builder.Services.AddScoped(typeof(IGenericRespository<>), typeof(GenericRepository<>));
@@ -95,32 +94,27 @@ builder.Services.AddIdentityCore<APIUser>()
 
 
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-// Api Versioning 
-builder.Services.AddApiVersioning(options =>
-{
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
-    options.ReportApiVersions = true;
-    options.ApiVersionReader = ApiVersionReader.Combine(
-        new QueryStringApiVersionReader("api-version"),
-        new HeaderApiVersionReader("X-Version"),
-        new MediaTypeApiVersionReader("Ver")
-        );
-});
+//// Api Versioning 
+//builder.Services.AddApiVersioning(options =>
+//{
+//    options.AssumeDefaultVersionWhenUnspecified = true;
+//    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+//    options.ReportApiVersions = true;
+//    options.ApiVersionReader = ApiVersionReader.Combine(
+//        new QueryStringApiVersionReader("api-version"),
+//        new HeaderApiVersionReader("X-Version"),
+//        new MediaTypeApiVersionReader("Ver")
+//        );
+//});
 
-builder.Services.AddVersionedApiExplorer(
-    Options =>
-    {
-        Options.GroupNameFormat = "'v'vvv";
-        Options.SubstituteApiVersionInUrl = true;
-    });
+
+//builder.Services.AddVersionedApiExplorer(
+//    Options =>
+//    {
+//        Options.GroupNameFormat = "'v'vvv";
+//        Options.SubstituteApiVersionInUrl = true;
+//    });
 
 
 // responses caching 
@@ -130,7 +124,6 @@ builder.Services.AddResponseCaching(options =>
     options.UseCaseSensitivePaths = true;
 });
 
-var apps = builder.Build();
 
 // using OData 
 
@@ -138,6 +131,19 @@ builder.Services.AddControllers().AddOData(Options =>
 {
     Options.Select().Filter().OrderBy();
 });
+
+// Configuration for Serilog 
+// ctx stands for context variable lc stands for logger configuration   
+
+builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 
 // the middleware that managers the Global exception handlers inside the exception folder 

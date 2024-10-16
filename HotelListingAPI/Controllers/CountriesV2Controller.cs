@@ -8,19 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using HotelListingAPI.Data;
 using AutoMapper;
 using HotelListingAPI.DTO.CountryDTO;
-using HotelListingAPI.Contract;
 using Microsoft.AspNetCore.Authorization;
 using HotelListingAPI.Exceptions;
 using Microsoft.AspNetCore.OData.Query;
 using HotelListingAPI.Data.Model;
+using HotelListingAPI.Respository.Contract;
 
 namespace HotelListingAPI.Controllers
 {
-    [Route("api/v{version:apiVersion}/countries")]
+    //[Route("api/v{version:apiVersion}/countries")]
+    [Route("api/[controller]")]
     [ApiController]
     [ApiVersion("2.0")]
 
-    public class CountriesV2Controller : ControllerBase 
+    public class CountriesV2Controller2 : ControllerBase 
     {
         // private fields that makes refference to the class that i'm using here 
         private readonly IMapper _mapper;
@@ -30,7 +31,7 @@ namespace HotelListingAPI.Controllers
 
 
         // Constructor class
-        public CountriesV2Controller(IMapper mapper, ICountriesRespository countriesRespository, ILogger<CountriesController> logger)
+        public CountriesV2Controller2(IMapper mapper, ICountriesRespository countriesRespository, ILogger<CountriesController> logger)
         {
             
             this._mapper = mapper;
