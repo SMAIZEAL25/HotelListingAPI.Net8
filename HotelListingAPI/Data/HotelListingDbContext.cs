@@ -10,7 +10,10 @@ namespace HotelListingAPI.Data
 {
     public class HotelListingDbContext : IdentityDbContext <APIUser>
     {
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder.UseSqlServer("Server=.;Database=HotelListingAPIDb; Trusted_Connection=True;TrustServerCertificate=True; MultipleActiveResultSets=true"));
+        }
         public HotelListingDbContext (DbContextOptions options) : base(options)
         {
             
