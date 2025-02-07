@@ -30,7 +30,8 @@ namespace HotelListingAPI.AuthManager
             this._logger = logger;
         }
 
-        // this method createrefreshtoken so that we don't have to delete user while creating new token
+
+        // this method create refreshtoken so that we don't have to delete user while creating new token
         public async Task<string> CreateRefreshToken()
         {
             await _userManager.RemoveAuthenticationTokenAsync(_user,"HotelListingApi", "RefreshToken");
@@ -39,6 +40,7 @@ namespace HotelListingAPI.AuthManager
 
             return newRefreshToken;
         }
+
 
         public async Task<AuthResponseDto> VerifyRefreshToken(AuthResponseDto request)
         {
@@ -70,6 +72,8 @@ namespace HotelListingAPI.AuthManager
             return null;
 
         }
+
+
 
         public async Task<AuthResponseDto> Login(LoginDTO loginDTO)
         {
@@ -140,7 +144,6 @@ namespace HotelListingAPI.AuthManager
                 expires: DateTime.Now.AddMinutes(Convert.ToInt32(_configuration1["Jwtsettings:DurationInMinutes"])),
                  signingCredentials: credentails
                 );
-
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

@@ -58,14 +58,13 @@ namespace HotelListingAPI.Controllers
                 // return error 500 indicating failure 
                 return Problem($"Something went wrong in the {nameof(Register)}. please contact support or administrator", statusCode: 500);
             }
-    
 
         }
 
 
         // Post: // api/Account.Login
         [HttpPost]
-        [Route("Login")]
+        [Route("api/Account.Login")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)] 
@@ -96,7 +95,7 @@ namespace HotelListingAPI.Controllers
 
         // Post: // api/RefeshToken
         [HttpPost]
-        [Route("RefreshToken")]
+        [Route("api/RefeshToken")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
