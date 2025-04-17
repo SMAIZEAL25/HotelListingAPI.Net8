@@ -84,7 +84,7 @@ builder.Services.AddAuthentication(options =>
  
 
 
-// This is service is to add Identity users roles for our JWT Token Using entity Frame work store 
+// This service is to add Identity users roles for our JWT Token Using entity Frame work store 
 builder.Services.AddIdentityCore<APIUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<HotelListingDbContext>();
@@ -123,7 +123,6 @@ builder.Services.AddResponseCaching(options =>
 
 
 // using OData 
-
 builder.Services.AddControllers().AddOData(Options =>
 {
     Options.Select().Filter().OrderBy();
