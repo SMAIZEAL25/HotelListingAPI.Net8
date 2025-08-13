@@ -92,26 +92,6 @@ builder.Services.AddIdentityCore<APIUser>()
 
 
 
-//// Api Versioning 
-//builder.Services.AddApiVersioning(options =>
-//{
-//    options.AssumeDefaultVersionWhenUnspecified = true;
-//    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
-//    options.ReportApiVersions = true;
-//    options.ApiVersionReader = ApiVersionReader.Combine(
-//        new QueryStringApiVersionReader("api-version"),
-//        new HeaderApiVersionReader("X-Version"),
-//        new MediaTypeApiVersionReader("Ver")
-//        );
-//});
-
-
-//builder.Services.AddVersionedApiExplorer(
-//    Options =>
-//    {
-//        Options.GroupNameFormat = "'v'vvv";
-//        Options.SubstituteApiVersionInUrl = true;
-//    });
 
 
 // responses caching 
